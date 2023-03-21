@@ -11,7 +11,6 @@ const details = document.querySelector(".details");
 
 //constants
 const oneDieReg = /\d{1,2}d\d{1,3}/;
-const constReg = /\d{1,3}/;
 
 function isValidOneDie(die) {
   return oneDieReg.test(die);
