@@ -48,7 +48,8 @@ function replaceDice(rollIn) {
 }
 
 function rollDice(rollIn) {
-  //send to function to replace dice with values in string TODO
+  //send to function to replace dice with values in string TODO pass back the actual rolls so we can display them later
+  //TODO send to function to evaluate string as a mathematical expression so we can get roll sum
   //if any errors, fire an error warning
   //
   //
