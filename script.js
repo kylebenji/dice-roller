@@ -1,6 +1,7 @@
 //buttons
 const btnRoll = document.querySelector(".roll");
 const btnExpound = document.querySelector(".expound");
+const btnHide = document.querySelector(".hide");
 
 //elements
 const input = document.querySelector(".dice");
@@ -8,23 +9,26 @@ const printout = document.querySelector(".printout");
 const print = document.querySelector(".print");
 const details = document.querySelector(".details");
 
-let rollsActual = [];
+//constants
 const oneDieReg = /\d{1,2}d\d{1,3}/;
+const constReg = /\d{1,3}/;
 
-function parseOneRoll(rollInput) {
+function isValidOneDie(die) {
+  return oneDieReg.test(die);
+}
+
+function handleDie(dice) {
+  let diceNumSize = parseOneDie(dice);
+  console.log(diceNumSize);
+  return rollOneSizeDie(diceNumSize);
+}
+
+function parseOneDie(rollInput) {
   dIndex = rollInput.indexOf("d");
   return [
     Number(rollInput.substring(0, dIndex)),
     Number(rollInput.substring(dIndex + 1, rollInput.length)),
   ];
-}
-
-function isValidRoll(rollInput) {
-  return isValidOneDie(rollInput);
-}
-
-function isValidOneDie(die) {
-  return oneDieReg.test(die);
 }
 
 function rollOneSizeDie(diceNumSize) {
@@ -40,10 +44,22 @@ function rollOneSizeDie(diceNumSize) {
   return [sum, rollsActual];
 }
 
+function replaceDice(rollIn) {
+  //loop through input, replace dice with their actual values so we can evaluate as a mathematical expression using eval() TODO
+}
+
+function rollDice(rollIn) {
+  //send to function to replace dice with values in string TODO
+  //if any errors, fire an error warning
+  //
+  //
+}
+
 function printRolls(rollsActual) {
   let out = `You rolled a ${rollsActual[0]}!!`;
   printout.classList.remove("hidden");
   print.textContent = out;
+  printDetails(rollsActual);
 }
 
 function printDetails(rollsActual) {
@@ -62,16 +78,17 @@ btnRoll.addEventListener("click", function () {
   printout.classList.add("hidden");
   details.classList.add("hidden");
   console.log(rollInput);
-  if (isValidRoll(rollInput)) {
-    let diceNumSize = parseOneRoll(rollInput);
-    console.log(diceNumSize);
-    rollsActual = rollOneSizeDie(diceNumSize);
-    console.log(rollsActual);
-    printRolls(rollsActual);
-  }
+  let rollsActual = rollDice(rollInput);
+  console.log(rollsActual);
+  printRolls(rollsActual);
 });
 
 btnExpound.addEventListener("click", function () {
+  btnHide.classList.remove("hidden");
   details.classList.remove("hidden");
-  printDetails(rollsActual);
+});
+
+btnHide.addEventListener("click", function () {
+  details.classList.add("hidden");
+  btnHide.classList.add("hidden");
 });
