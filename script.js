@@ -10,15 +10,12 @@ const print = document.querySelector(".print");
 const details = document.querySelector(".details");
 
 //constants
-const oneDieReg = /\d{1,2}d\d{1,3}/;
-
-function isValidOneDie(die) {
-  return oneDieReg.test(die);
-}
+const oneDieReg = RegExp(/\d{1,2}d\d{1,3}/, "gd");
+const equationRegEx = RegExp(/[^0-9/*+()-]/);
 
 function handleDie(dice) {
   let diceNumSize = parseOneDie(dice);
-  console.log(diceNumSize);
+  // console.log(diceNumSize);
   return rollOneSizeDie(diceNumSize);
 }
 
@@ -44,15 +41,29 @@ function rollOneSizeDie(diceNumSize) {
 }
 
 function replaceDice(rollIn) {
-  //loop through input, replace dice with their actual values so we can evaluate as a mathematical expression using eval() TODO
+  //loop through input, replace dice with their actual values so we can evaluate as a mathematical expression
+  let strMatchhAll = rollIn.matchAll(oneDieReg);
+  let rollsActual = [];
+  for (const match of strMatchhAll) {
+    let [roll, dice] = handleDie(match[0]);
+    rollsActual = [...rollsActual, ...dice];
+    rollIn = rollIn.replace(match[0], roll);
+  }
+  return [rollIn, rollsActual];
 }
 
 function rollDice(rollIn) {
-  //send to function to replace dice with values in string TODO pass back the actual rolls so we can display them later
-  //TODO send to function to evaluate string as a mathematical expression so we can get roll sum
-  //if any errors, fire an error warning
-  //
-  //
+  //send to function to replace dice with values in string pass back the actual rolls so we can display them later
+  let [repStr, rollsActual] = replaceDice(rollIn);
+  //evaluate string as a mathematical expression so we can get roll sum
+  let roll = "";
+  if (!equationRegEx.test(repStr)) {
+    //adding some initial protection for this eval(), this should prevent special characters and letters that are not math
+    roll = eval(repStr);
+  } else {
+    roll = "invalid expression";
+  } //if any errors, fire an error warning
+  return [roll, rollsActual];
 }
 
 function printRolls(rollsActual) {
@@ -74,12 +85,10 @@ function printDetails(rollsActual) {
 }
 
 btnRoll.addEventListener("click", function () {
-  let rollInput = input.value;
+  let rollInput = input.value.replace(/\s+/g, ""); //get value from input and trim whitespace
   printout.classList.add("hidden");
   details.classList.add("hidden");
-  console.log(rollInput);
   let rollsActual = rollDice(rollInput);
-  console.log(rollsActual);
   printRolls(rollsActual);
 });
 
