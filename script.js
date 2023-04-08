@@ -67,7 +67,7 @@ function rollDice(rollIn) {
 }
 
 function printRolls(rollsActual) {
-  let out = `You rolled a ${rollsActual[0]}!!`;
+  let out = `You rolled a ${Math.trunc(rollsActual[0])}!!`;
   printout.classList.remove("hidden");
   print.textContent = out;
   printDetails(rollsActual);
